@@ -50,6 +50,8 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     import matplotlib.animation as animation
 
+    np.random.seed(123)
+    
     samples = np.zeros(100, dtype=[('input',  float, 2),
                                    ('output', float, 1)])
 
@@ -63,7 +65,7 @@ if __name__ == '__main__':
 
     network = Perceptron(2,1)
     network.reset()
-    lrate = 0.01
+    lrate = 0.05
 
     fig = plt.figure(figsize=(6,6))
     ax = plt.subplot(1,1,1, aspect=1, frameon=False)
@@ -81,8 +83,8 @@ if __name__ == '__main__':
         error = 0
 
         count = 0
+        lrate *= 0.99
         while error == 0 and count < 10:
-            lrate *= 0.999
             n = np.random.randint(samples.size)
             network.propagate_forward( samples['input'][n] )
             error = network.propagate_backward( samples['output'][n], lrate )
@@ -103,5 +105,10 @@ if __name__ == '__main__':
         
         return line,
 
-    ani = animation.FuncAnimation(fig, animate, np.arange(1, 100))
+    Writer = animation.writers['ffmpeg']
+    writer = Writer(fps=30,
+                    metadata=dict(artist='Nicolas P. Rougier'), bitrate=1800)
+
+    ani = animation.FuncAnimation(fig, animate, np.arange(1, 300))
+    ani.save('perceptron.mp4', writer=writer)
     plt.show()

@@ -479,7 +479,7 @@ Have a look at [Multiple individual 2d rotation at once](https://stackoverflow.c
 
 In this exercise, we'll implement one of the most simple feed-forward neural
 network, a.k.a. the [Perceptron](https://en.wikipedia.org/wiki/Perceptron). We'll use it to discrimate between two classes
-(points in two dimensions):
+(points in two dimensions,see [desired output](perceptron.mp4)):
 
 ```Python
 samples = np.zeros(100, dtype=[('input',  float, 2),
@@ -579,6 +579,9 @@ for i in range(1000):
     network.propagate_forward( samples['input'][n] )
     error = network.propagate_backward( samples['output'][n], lrate )
 ```
+
+For other type of neural networks, you can have a look at https://github.com/rougier/neural-networks/.
+
 
 ## ❹ – References
 
