@@ -602,7 +602,7 @@ that exist online.
 
 You can access all ASPP archives from https://python.g-node.org/wiki/archives
 
-* **2017** (Nikiti, GreeceJuan Nunez-Iglesias):
+* **2017** (Nikiti, Greece, Juan Nunez-Iglesias):
   [exercises](https://github.com/jni/aspp2017-numpy) –  [solutions](https://github.com/jni/aspp2017-numpy-solutions)
 * **2016** (Reading, United Kingdom, Stéfan van der Walt):
   [exercises](https://github.com/ASPP/2016_numpy)
