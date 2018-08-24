@@ -396,8 +396,8 @@ We consider a collection of 2d squares that are each defined by four points, a s
 made of 25 squares, scaled by 0.1, translated by (1,0) and with increasing
 rotation angles. The order of operation is `scale`, `translate` and
 `rotate`. What would be the best structure `S` to hold all these information at
-once?
-
+once?  
+**→  Hints**: [structured arrays](https://docs.scipy.org/doc/numpy/user/basics.rec.html)
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
 ```Python
@@ -418,17 +418,6 @@ the results in new array:
 P = np.zeros((len(S), 4, 2))
 # Your code here (to populate P)
 ...
-
-# Display
-fig = plt.figure(figsize=(6,6))
-ax = plt.subplot(1,1,1, frameon=False)
-for i in range(len(P)):
-    X = np.r_[P[i,:,0], P[i,0,0]]
-    Y = np.r_[P[i,:,1], P[i,0,1]]
-    plt.plot(X, Y, color="black")
-plt.xticks([]), plt.yticks([])
-plt.tight_layout()
-plt.show()
 ```
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
@@ -475,8 +464,16 @@ plt.savefig("geometry.png")
 plt.show()
 ```
 
-</p></details>
+</p></details><br/>
 
+The proposed solution has two loops. Can you imagine a way to do it without loop ?  
+**→ Hints**: [einsum](https://docs.scipy.org/doc/numpy/reference/generated/numpy.einsum.html)
+
+<details><summary><b>Solution</b> (click to expand)</summary><p>
+
+Have a look at [Multiple individual 2d rotation at once](https://stackoverflow.com/questions/40822983/multiple-individual-2d-rotation-at-once) on stack overflow. I did not implement it, feel free to issue a PR with the solution.
+
+</p></details>
 
 ### Neural networks
 
