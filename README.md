@@ -167,6 +167,8 @@ one-dimensional or two-dimensional array in the console. It won't replace matplo
 • Create a 2d array with 1 on the border and 0 inside   
 • Given a 1D array, negate all elements which are between 3 and 8, in place  
 
+For a more complete list, you can have a look at the [100 Numpy Exercises](https://github.com/rougier/numpy-100).
+
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
 Sources: [basic-manipulation.py](basic-manipulation.py)
