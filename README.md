@@ -110,6 +110,53 @@ You're supposed to be already familiar with NumPy. If not, you should read the
 stuff, let's do some warmup exercises (that should pose no problem). If you
 choke on the first exercise, you should try to have a look at the [Anatomy of an array](https://www.labri.fr/perso/nrougier/from-python-to-numpy/#anatomy-of-an-array) and check also the [Quick references](https://www.labri.fr/perso/nrougier/from-python-to-numpy/#quick-references).
 
+### Useful tools
+
+Before heading to the exercises, you might want to play with the [tools.py](tools.py) file
+that offer a set of debug tools that might be (hopefully) useful in your
+day-to-day computational scientific life.
+
+```Pycon
+>>> from tools import sysinfo, info, timeit, imshow
+
+>>> sysinfo()
+Date:       08/25/18
+Python:     3.7.0
+Numpy:      1.14.5
+Scipy:      1.1.0
+Matplotlib: 2.2.2
+
+>>> Z = np.arange(10)
+>>> info(Z)
+------------------------------
+Interface (item)
+  shape:       (10,)
+  dtype:       int64
+  size:        10
+  order:       ☑ C  ☐ Fortran
+
+Memory (byte)
+  item size:   8
+  array size:  80
+  strides:     (8,)
+
+Properties
+  own data:    ☑ Yes  ☐ No
+  writeable:   ☑ Yes  ☐ No
+  contiguous:  ☑ Yes  ☐ No
+  aligned:     ☑ Yes  ☐ No
+------------------------------
+
+>>> timeit("Z=np.random.uniform(0,1,1000000)", globals())
+11.4 ms ± 0.198 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)
+```
+
+Last, but not least, there is also an `imshow` function that is able to display a
+one-dimensional or two-dimensional array in the console. It won't replace matplotlib but it can comes handy for some small arrays:
+
+![](imshow.png)
+
+
 ### Basic manipulation
 
 • Create a vector with values ranging from 10 to 49  
@@ -581,6 +628,7 @@ for i in range(1000):
 ```
 
 For other type of neural networks, you can have a look at https://github.com/rougier/neural-networks/.
+
 
 
 ## ❹ – References

@@ -1,5 +1,10 @@
+# -----------------------------------------------------------------------------
+# Copyright (C) 2018  Nicolas P. Rougier
+# Distributed under the terms of the BSD License.
+# -----------------------------------------------------------------------------
 import numpy as np
 import matplotlib.pyplot as plt
+
 from numpy.lib.stride_tricks import as_strided
 
 def sliding_window(Z, size=2):

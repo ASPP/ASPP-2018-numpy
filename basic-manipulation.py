@@ -1,3 +1,7 @@
+# -----------------------------------------------------------------------------
+# Copyright (C) 2018  Nicolas P. Rougier
+# Distributed under the terms of the BSD License.
+# -----------------------------------------------------------------------------
 import numpy as np
 
 # Create a vector with values ranging from 10 to 49

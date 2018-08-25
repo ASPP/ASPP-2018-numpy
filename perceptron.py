@@ -105,10 +105,9 @@ if __name__ == '__main__':
         
         return line,
 
-    Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=30,
-                    metadata=dict(artist='Nicolas P. Rougier'), bitrate=1800)
-
-    ani = animation.FuncAnimation(fig, animate, np.arange(1, 300))
-    ani.save('perceptron.mp4', writer=writer)
+    anim = animation.FuncAnimation(fig, animate, np.arange(1, 300))
+    #Writer = animation.writers['ffmpeg']
+    #writer = Writer(fps=30,
+    #                metadata=dict(artist='Nicolas P. Rougier'), bitrate=1800)
+    # anim.save('perceptron.mp4', writer=writer)
     plt.show()

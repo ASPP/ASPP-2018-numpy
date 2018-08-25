@@ -25,6 +25,8 @@ from matplotlib.cm import viridis
 def imshow (Z, vmin=None, vmax=None, cmap=viridis, show_cmap=True):
     ''' Show a 2D numpy array using terminal colors '''
 
+    Z = np.atleast_2d(Z)
+    
     if len(Z.shape) != 2:
         print("Cannot display non 2D array")
         return
@@ -49,7 +51,7 @@ def imshow (Z, vmin=None, vmax=None, cmap=viridis, show_cmap=True):
             elif (c > 255):
                 c=255
             data += "\x1b[48;5;%dm  " % c
-            u = vmax - (i/float(Z.shape[0]-1)) * ((vmax-vmin))
+            u = vmax - (i/float(max(Z.shape[0]-1,1))) * ((vmax-vmin))
         if show_cmap:
             data += "\x1b[0m  "
             data += "\x1b[48;5;%dm  " % (16 + (1-i/float(Z.shape[0]))*239)
