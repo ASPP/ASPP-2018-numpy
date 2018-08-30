@@ -18,3 +18,4 @@ print(np.nan - np.nan)
 
 # Result is False !!!
 print(0.3 == 3 * 0.1)
+print("0.1 really is {:0.56f}".format(0.1))

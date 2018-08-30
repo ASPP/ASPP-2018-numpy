@@ -55,13 +55,20 @@ def timeit(stmt, globals=globals()):
 
     
 def info(Z):
+    import sys
     import numpy as np
-        
+    endianness = {'=': 'native (%s)' % sys.byteorder,
+                 '<': 'little',
+                 '>': 'big',
+                 '|': 'not applicable'}
+
     print("------------------------------")
     print("Interface (item)")
     print("  shape:      ", Z.shape)
     print("  dtype:      ", Z.dtype)
+    print("  length:     ", len(Z))
     print("  size:       ", Z.size)
+    print("  endianness: ", endianness[Z.dtype.byteorder])
     if np.isfortran(Z):
         print("  order:       ☐ C  ☑ Fortran")
     else:
@@ -93,3 +100,16 @@ def info(Z):
         print("  aligned:     ☐ Yes  ☑ No")
     print("------------------------------")
     print()
+
+
+if __name__ == '__main__':
+    import numpy as np
+    
+    sysinfo()
+
+    Z = np.arange(9).reshape(3,3)
+    info(Z)
+
+    timeit("Z=np.random.uniform(0,1,1000000)", globals())
+
+    

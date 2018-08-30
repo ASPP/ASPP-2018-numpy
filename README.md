@@ -95,12 +95,12 @@ As you may have guessed, the second function is the
 vectorized-optimized-faster-NumPy version of the first function and it runs 10x
 faster than the pure Python version. But it is hardly readable.
 
-Last, but not least, you may have noticed the the `random_walk_fast` works but
-is not reproducible at all, which is pretty annoying. If you want to know why,
-you can have a look at the article [Re-run, Repeat, Reproduce, Reuse,
-Replicate: Transforming Code into Scientific
+**Warning**: You may have noticed (or not) that the `random_walk_fast` works
+but is not reproducible at all, which is pretty annoying in Science. If you
+want to know why, you can have a look at the article [Re-run, Repeat,
+Reproduce, Reuse, Replicate: Transforming Code into Scientific
 Contributions](https://www.frontiersin.org/articles/10.3389/fninf.2017.00069/full).
-
+that I wrote with Fabien Benureau.
 
 
 ## ❷ – Warmup
@@ -116,6 +116,9 @@ Before heading to the exercises, you might want to play with the [tools.py](tool
 that offer a set of debug tools that might be (hopefully) useful in your
 day-to-day computational scientific life.
 
+The `sysinfo` function displays some information related to you scientific
+environment:
+
 ```Pycon
 >>> from tools import sysinfo, info, timeit, imshow
 
@@ -125,20 +128,26 @@ Python:     3.7.0
 Numpy:      1.14.5
 Scipy:      1.1.0
 Matplotlib: 2.2.2
+```
 
->>> Z = np.arange(10)
+The `info` function displays a lot of information for a specific array:
+
+```Pycon
+>>> Z = np.arange(9).reshape(3,3)
 >>> info(Z)
 ------------------------------
 Interface (item)
-  shape:       (10,)
+  shape:       (3,3)
   dtype:       int64
-  size:        10
+  length:      3
+  size:        9
+  endianess:   native (little)
   order:       ☑ C  ☐ Fortran
 
 Memory (byte)
   item size:   8
-  array size:  80
-  strides:     (8,)
+  array size:  72
+  strides:     (24, 8)
 
 Properties
   own data:    ☑ Yes  ☐ No
@@ -146,18 +155,27 @@ Properties
   contiguous:  ☑ Yes  ☐ No
   aligned:     ☑ Yes  ☐ No
 ------------------------------
+```
 
+The `timeit` function allows to precisely time some code (e.g. to measure which
+one is the fastest). It is pretty similar to the `%timeit` magoc function from
+IPython:
+
+```
 >>> timeit("Z=np.random.uniform(0,1,1000000)", globals())
 11.4 ms ± 0.198 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ```
 
-Last, but not least, there is also an `imshow` function that is able to display a
-one-dimensional or two-dimensional array in the console. It won't replace matplotlib but it can comes handy for some small arrays:
+Last, but not least, there is also an `imshow` function that is able to display
+a one-dimensional or two-dimensional array in the console. It won't replace
+matplotlib but it can comes handy for some (small) arrays:
 
 ![](imshow.png)
 
 
 ### Basic manipulation
+
+Let's start with some basic operations:
 
 • Create a vector with values ranging from 10 to 49  
 • Create a null vector of size 100 but the fifth value which is 1  
@@ -202,8 +220,9 @@ Z[(3 < Z) & (Z <= 8)] *= -1`
 ```
 </p></details>
 
-
 ### NaN arithmetics
+
+Just a reminder on NaN arithmetics:
 
 What is the result of the following expression?  
 **→ Hints**: [What Every Computer Scientist Should Know About Floating-Point Arithmetic, D. Goldberg, 1991](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)  
@@ -238,9 +257,12 @@ print(np.nan - np.nan)
 
 # Result is False !!!
 print(0.3 == 3 * 0.1)
+print("0.1 really is {:0.56f}".format(0.1))
 ```
 
 </p></details>
+
+
 
 ### Computing strides
 
@@ -314,6 +336,69 @@ print(Z2)
 ```
 
 </p></details>
+
+
+### Reordering things
+
+Let's consider the following list:
+
+```Python
+L = [  0,   0,   0,   0,   0,   0,   3, 233,
+       0,   0,   0,   0,   0,   0,   3, 237,
+       0,   0,   0,   0,   0,   0,   3, 235,
+       0,   0,   0,   0,   0,   0,   3, 239,
+       0,   0,   0,   0,   0,   0,   3, 234,
+       0,   0,   0,   0,   0,   0,   3, 238,
+       0,   0,   0,   0,   0,   0,   3, 236,
+       0,   0,   0,   0,   0,   0,   3, 240]
+```
+
+This is actually the byte dump of a 2x2x2 array, fortran ordered of 64 bits
+integers using big endian encoding.
+
+* How would you access element at [1,0,0] with NumPy (simple)?
+* How would you access element at [1,0,0] without NumPy (harder)?
+
+<details><summary><b>Solution</b> (click to expand)</summary><p>
+
+Sources [reorder.py](reorder.py)
+
+```Python
+
+import struct
+import numpy as np
+
+# Generation of the array
+# Z = range(1001, 1009)
+# L = np.reshape(Z, (2,2,2), order="F").ravel().astype(">i8").view(np.ubyte)
+
+L = [  0,   0,   0,   0,   0,   0,   3, 233,
+       0,   0,   0,   0,   0,   0,   3, 237,
+       0,   0,   0,   0,   0,   0,   3, 235,
+       0,   0,   0,   0,   0,   0,   3, 239,
+       0,   0,   0,   0,   0,   0,   3, 234,
+       0,   0,   0,   0,   0,   0,   3, 238,
+       0,   0,   0,   0,   0,   0,   3, 236,
+       0,   0,   0,   0,   0,   0,   3, 240]
+
+# Automatic (numpy)
+Z = np.reshape(np.array(L, dtype=np.ubyte).view(dtype=">i8"), (2,2,2), order="F")
+print(Z[1,0,0])
+
+# Manual (brain)
+shape = (2,2,2)
+itemsize = 8
+# We can probably do better
+strides = itemsize, itemsize*shape[0], itemsize*shape[0]*shape[1]
+index = (1,0,0)
+start = sum(i*s for i,s in zip(index,strides))
+end = start+itemsize
+value = struct.unpack(">Q", bytes(L[start:end]))[0]
+print(value)
+```
+
+</p></details>
+
 
 ### Heat equation
 
@@ -638,7 +723,7 @@ For other type of neural networks, you can have a look at https://github.com/rou
 ### Book & tutorials
 
 This is a curated list of resources among the plethora of books & tutorials
-that exist online.
+that exist online. Make no mistake, it is strongly biased.
 
 * [From Python to Numpy](http://www.labri.fr/perso/nrougier/from-python-to-numpy/),
   Nicolas P.Rougier, 2017
