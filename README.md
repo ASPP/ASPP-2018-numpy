@@ -1,15 +1,23 @@
 # Advanced NumPy
 
 A 3h00 course on advanced numpy techniques  
-[Nicolas P. Rougier](http://www.labri.fr/perso/nrougier), [G-Node summer school](https://python.g-node.org/), Camerino, Italy, 2018
+[Nicolas P. Rougier](http://www.labri.fr/perso/nrougier),
+[G-Node summer school](https://python.g-node.org/),
+Camerino, Italy, 2018
+
 
 > NumPy is a library for the Python programming language, adding support for
-> large, multi-dimensional arrays and matrices, along with a large collection of
-> high-level mathematical functions to operate on these arrays.
+> large, multi-dimensional arrays and matrices, along with a large collection
+> of high-level mathematical functions to operate on these arrays.
 >
 > – Wikipedia
 
-**Quicklinks**: [Numpy website](https://www.numpy.org) – [Numpy GitHub](https://github.com/numpy/numpy) – [Numpy documentation](https://www.numpy.org/devdocs/reference/) – [ASPP archives](https://python.g-node.org/wiki/archives)
+
+**Quicklinks**:
+  [Numpy website](https://www.numpy.org) –
+  [Numpy GitHub](https://github.com/numpy/numpy) –
+  [Numpy documentation](https://www.numpy.org/devdocs/reference/) –
+  [ASPP archives](https://python.g-node.org/wiki/archives)
 
 
 #### Table of Contents
@@ -120,9 +128,8 @@ The `sysinfo` function displays some information related to you scientific
 environment:
 
 ```Pycon
->>> from tools import sysinfo, info, timeit, imshow
-
->>> sysinfo()
+>>> import tools
+>>> tools.sysinfo()
 Date:       08/25/18
 Python:     3.7.0
 Numpy:      1.14.5
@@ -133,8 +140,9 @@ Matplotlib: 2.2.2
 The `info` function displays a lot of information for a specific array:
 
 ```Pycon
+>>> import tools
 >>> Z = np.arange(9).reshape(3,3)
->>> info(Z)
+>>> tools.info(Z)
 ------------------------------
 Interface (item)
   shape:       (3,3)
@@ -161,8 +169,10 @@ The `timeit` function allows to precisely time some code (e.g. to measure which
 one is the fastest). It is pretty similar to the `%timeit` magoc function from
 IPython:
 
-```
->>> timeit("Z=np.random.uniform(0,1,1000000)", globals())
+```Pycon
+>>> import tools
+>>> tools.timeit("Z=np.random.uniform(0,1,1000000)", globals())
+>>> Measuring time for 'Z=np.random.uniform(0,1,1000000)'
 11.4 ms ± 0.198 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ```
 
@@ -220,12 +230,15 @@ Z[(3 < Z) & (Z <= 8)] *= -1`
 ```
 </p></details>
 
+
+
 ### NaN arithmetics
 
 Just a reminder on NaN arithmetics:
 
 What is the result of the following expression?  
 **→ Hints**: [What Every Computer Scientist Should Know About Floating-Point Arithmetic, D. Goldberg, 1991](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)  
+
 
 ```Python
 print(0 * np.nan)
@@ -267,7 +280,10 @@ print("0.1 really is {:0.56f}".format(0.1))
 ### Computing strides
 
 Consider an array Z, how to compute Z strides (manually)?  
-**→ Hints**: [itemsize](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.itemsize.html) – [shape](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.shape.html) – [ndim](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.ndim.html)  
+**→ Hints**:
+ [itemsize](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.itemsize.html) –
+ [shape](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.shape.html) –
+ [ndim](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.ndim.html)  
 
 
 ```Python
@@ -314,7 +330,10 @@ print(Z.strides, " – ", strides(Z))
 ### Repeat and repeat
 
 Can you tell the difference?  
-**→ Hints**: [tile](https://docs.scipy.org/doc/numpy/reference/generated/numpy.tile.html) – [as_strided](https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.lib.stride_tricks.as_strided.html)  
+**→ Hints**:
+  [tile](https://docs.scipy.org/doc/numpy/reference/generated/numpy.tile.html) –
+  [as_strided](https://docs.scipy.org/doc/numpy/reference/generated/numpy.lib.stride_tricks.as_strided.html)  
+
 
 ```Python
 import numpy as np
@@ -427,6 +446,7 @@ The goal here is to compute the discrete equation over a finite domain using
 then used to compute `u` at the next iteration. Using the the following initial
 conditions:
 
+
 ```Python
 U = np.random.uniform(0.00, 0.05, (50,100))
 U[0,5::10] = 1
@@ -530,6 +550,94 @@ plt.show()
 
 </p></details>
 
+
+### Input / Output
+
+→ Exercise written by Stéfan Van der Walls.  
+
+Place the following data in a text file, data.txt:
+
+```
+% rank         lemma (10 letters max)      frequency       dispersion
+21             they                        1865844         0.96
+42             her                         969591          0.91
+49             as                          829018          0.95
+7              to                          6332195         0.98
+63             take                        670745          0.97
+14             you                         3085642         0.92
+35             go                          1151045         0.93
+56             think                       772787          0.91
+28             not                         1638883         0.98
+```
+
+Now, design a suitable structured data type, then load the data from the text
+file using [np.loadtxt](https://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html) (look at the documenration to see how to handle the '%' comment character).
+
+Here's a skeleton to start with:
+
+```Python
+import numpy as np
+txtdata = open('data.txt', 'r')
+
+# Construct the data-type
+# For example:
+# dtype = np.dtype([('x', np.float), ('y', np.int), ('z', np.uint8)])
+
+dt = np.dtype(...)  # Modify this line to give the correct answer
+data = np.loadtxt(...)  # Load data with loadtxt
+```
+
+Examine the data you got:
+ * Extract words only
+ * Extract the 3rd row
+ * Print all words with rank < 30
+
+Sort the data according to frequency (see
+[np.sort](https://docs.scipy.org/doc/numpy/reference/routines.sort.html)).
+
+
+Save the result to a compressed numpy data file (e.g. "sorted.npz") using [np.savez](https://docs.scipy.org/doc/numpy/reference/generated/numpy.savez.html) and load it back with `out = np.load("sorted.npz")`. Do you get back what you put in? Why?
+
+<details><summary><b>Solution</b> (click to expand)</summary><p>
+
+Source: [input-output.py](input-output.py)
+
+```
+import numpy as np
+
+# Create our own dtype
+dtype = np.dtype([('rank',       'i8'),
+                  ('lemma',      'S8'),
+                  ('frequency',  'i8'),
+                  ('dispersion', 'f8')])
+
+# Load file using our own dtype
+data = np.loadtxt('data.txt', comments='%', dtype=dtype)
+
+# Extract words only
+print(data["lemma"])
+
+# Extract the 3rd row
+print(data[2])
+
+# Print all words with rank < 30
+print(data[data["rank"] < 30])
+
+# Sort the data according to frequency (see [np.argsort]()).
+sorted = np.sort(data, order="frequency")
+print(sorted)
+
+# Save unsorted and sorted array
+np.savez("sorted.npz", data=data, sorted=sorted)
+
+# Load saved array
+out = np.load("sorted.npz")
+print(out["sorted"])
+```
+
+</p></details><br/>
+
+
 ## ❸ – Advanced exercises
 
 ### Geometry
@@ -543,6 +651,7 @@ rotation angles. The order of operation is `scale`, `translate` and
 `rotate`. What would be the best structure `S` to hold all these information at
 once?  
 **→  Hints**: [structured arrays](https://docs.scipy.org/doc/numpy/user/basics.rec.html)
+
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
 ```Python
@@ -564,6 +673,13 @@ P = np.zeros((len(S), 4, 2))
 # Your code here (to populate P)
 ...
 ```
+
+You can start by writing a translate, scale and rotate function first.
+
+> Rotation reminder. Considering a point (x,y) and a rotation angle a,
+> the rotated coordinates (x',y') are:
+>
+> x' = x.cos(a) - y.sin(a) and y' = x.sin(a) + y.cos(a)
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 

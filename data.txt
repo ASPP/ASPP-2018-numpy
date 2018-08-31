@@ -1,0 +1,10 @@
+% rank         lemma (8 letters max)      frequency       dispersion
+21             they                        1865844         0.96
+42             her                         969591          0.91
+49             as                          829018          0.95
+7              to                          6332195         0.98
+63             take                        670745          0.97
+14             you                         3085642         0.92
+35             go                          1151045         0.93
+56             think                       772787          0.91
+28             not                         1638883         0.98
