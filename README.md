@@ -553,7 +553,7 @@ plt.show()
 
 ### Input / Output
 
-→ Exercise written by Stéfan Van der Walls.  
+→ Exercise written by [Stefan van der Walt](http://mentat.za.net/).  
 
 Place the following data in a text file, data.txt:
 
