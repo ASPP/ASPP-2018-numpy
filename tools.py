@@ -23,7 +23,9 @@ def sysinfo():
 def timeit(stmt, globals=globals()):
     import numpy as np
     import timeit as _timeit
-    
+
+    print("Timing '{0}'".format(stmt))
+        
     # Rough approximation of a 10 runs
     trial = _timeit.timeit(stmt, globals=globals, number=10)/10
     
@@ -49,7 +51,7 @@ def timeit(stmt, globals=globals()):
         if mean > value: break
     mean *= factor
     std *= factor
-    
+
     print("%.3g %s ± %.3g %s per loop (mean ± std. dev. of %d runs, %d loops each)" %
           (mean, unit, std, unit, repeat, number))
 
