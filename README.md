@@ -390,7 +390,7 @@ L = [  0,   0,   0,   0,   0,   0,   3, 233,
 This is actually the byte dump of a 2x2x2 array, fortran ordered of 64 bits
 integers using big endian encoding.
 
-* How would you access element at [1,0,0] with NumPy (simple)?
+How would you access element at [1,0,0] with NumPy (simple)?  
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
@@ -416,10 +416,10 @@ L = [  0,   0,   0,   0,   0,   0,   3, 233,
 Z = np.reshape(np.array(L, dtype=np.ubyte).view(dtype=">i8"), (2,2,2), order="F")
 print(Z[1,0,0])
 ```
-</p></details>
+</p></details><br/>
 
 
-* How would you access element at [1,0,0] without NumPy (harder)?
+How would you access element at [1,0,0] without NumPy (harder)?  
   **→ Hints**: Use your brain!
 
 
