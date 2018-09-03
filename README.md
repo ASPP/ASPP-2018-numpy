@@ -984,6 +984,9 @@ quantize the image.
 Sources: [kmeans.py](kmeans.py)
 
 ```Python
+# Code by Gareth Rees, posted on stack overflow
+# https://codereview.stackexchange.com/questions/61598/k-mean-with-numpy
+
 import numpy as np
 import scipy.spatial
 
