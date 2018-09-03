@@ -17,8 +17,9 @@ Camerino, Italy, 2018
   [Numpy website](https://www.numpy.org) –
   [Numpy GitHub](https://github.com/numpy/numpy) –
   [Numpy documentation](https://www.numpy.org/devdocs/reference/) –
-  [ASPP archives](https://python.g-node.org/wiki/archives)
-
+  [ASPP archives](https://python.g-node.org/wiki/archives) –
+  [100 Numpy Exercises](https://github.com/rougier/numpy-100) –
+  [From Python to Numpy](http://www.labri.fr/perso/nrougier/from-python-to-numpy/)
 
 #### Table of Contents
 
