@@ -98,7 +98,6 @@ def function_2(seq, sub):
     return candidates[mask]
 ```
 
-
 As you may have guessed, the second function is the
 vectorized-optimized-faster-NumPy version of the first function and it runs 10x
 faster than the pure Python version. But it is hardly readable.
@@ -107,8 +106,8 @@ faster than the pure Python version. But it is hardly readable.
 but is not reproducible at all, which is pretty annoying in Science. If you
 want to know why, you can have a look at the article [Re-run, Repeat,
 Reproduce, Reuse, Replicate: Transforming Code into Scientific
-Contributions](https://www.frontiersin.org/articles/10.3389/fninf.2017.00069/full).
-that I wrote with Fabien Benureau.
+Contributions](https://www.frontiersin.org/articles/10.3389/fninf.2017.00069/full)
+(that I wrote with [Fabien Benureau](https://github.com/benureau)).
 
 
 ## ❷ – Warmup
@@ -164,13 +163,13 @@ Properties
 ```
 
 
-Try to code these two functions. You can then compare your implementatio with
+Try to code these two functions. You can then compare your implementation with
 [mine](tools.py).
 
 
 The [tools.py](tools.py) script comes with two other functions that might be
 useful.  The `timeit` function allows to precisely time some code (e.g. to
-measure which one is the fastest). It is pretty similar to the `%timeit` magoc
+measure which one is the fastest). It is pretty similar to the `%timeit` magic
 function from IPython:
 
 ```Pycon
