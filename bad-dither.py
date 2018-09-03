@@ -6,7 +6,6 @@ import imageio
 import numpy as np
 import scipy.spatial
 
-
 # Number of final colors we want
 n = 16
 
