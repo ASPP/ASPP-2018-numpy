@@ -948,11 +948,11 @@ totally dissapeared.
 To check by  yourself, you'll write the corresponding script  and check for the
 result:
 
-1. Load an image (using [imageio](http://imageio.github.io/)).[imread](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imread)
+1. Load an image (using [imageio](http://imageio.github.io/).[imread](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imread))
 2. Find the number of unique colors and their frequency (counts)
 3. Pick the n=16 most frequent colors
 4. Replace colors in the original image with the closest color (found previously)
-5. Save the result (using [imageio](http://imageio.github.io/)).[imsave](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imsave)
+5. Save the result (using [imageio](http://imageio.github.io/).[imsave](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imsave))
 
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
