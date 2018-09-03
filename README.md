@@ -391,7 +391,36 @@ This is actually the byte dump of a 2x2x2 array, fortran ordered of 64 bits
 integers using big endian encoding.
 
 * How would you access element at [1,0,0] with NumPy (simple)?
+
+<details><summary><b>Solution</b> (click to expand)</summary><p>
+
+```Python
+
+import struct
+import numpy as np
+
+# Generation of the array
+# Z = range(1001, 1009)
+# L = np.reshape(Z, (2,2,2), order="F").ravel().astype(">i8").view(np.ubyte)
+
+L = [  0,   0,   0,   0,   0,   0,   3, 233,
+       0,   0,   0,   0,   0,   0,   3, 237,
+       0,   0,   0,   0,   0,   0,   3, 235,
+       0,   0,   0,   0,   0,   0,   3, 239,
+       0,   0,   0,   0,   0,   0,   3, 234,
+       0,   0,   0,   0,   0,   0,   3, 238,
+       0,   0,   0,   0,   0,   0,   3, 236,
+       0,   0,   0,   0,   0,   0,   3, 240]
+
+# Automatic (numpy)
+Z = np.reshape(np.array(L, dtype=np.ubyte).view(dtype=">i8"), (2,2,2), order="F")
+print(Z[1,0,0])
+```
+
+
 * How would you access element at [1,0,0] without NumPy (harder)?
+  **→ Hints**: Use your brain!
+
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
