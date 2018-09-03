@@ -120,9 +120,7 @@ choke on the first exercise, you should try to have a look at the [Anatomy of an
 
 ### Useful tools
 
-Before heading to the exercises, you might want to play with the [tools.py](tools.py) file
-that offer a set of debug tools that might be (hopefully) useful in your
-day-to-day computational scientific life.
+Before heading to the exercises, We'll write a `sysinfo` and `info` function that will help us debug our code.
 
 The `sysinfo` function displays some information related to you scientific
 environment:
@@ -137,7 +135,7 @@ Scipy:      1.1.0
 Matplotlib: 2.2.2
 ```
 
-The `info` function displays a lot of information for a specific array:
+While the `info` function displays a lot of information for a specific array:
 
 ```Pycon
 >>> import tools
@@ -165,9 +163,15 @@ Properties
 ------------------------------
 ```
 
-The `timeit` function allows to precisely time some code (e.g. to measure which
-one is the fastest). It is pretty similar to the `%timeit` magoc function from
-IPython:
+
+Try to code these two functions. You can then compare your implementatio with
+[mine](tools.py).
+
+
+The [tools.py](tools.py) script comes with two other functions that might be
+useful.  The `timeit` function allows to precisely time some code (e.g. to
+measure which one is the fastest). It is pretty similar to the `%timeit` magoc
+function from IPython:
 
 ```Pycon
 >>> import tools
@@ -176,9 +180,9 @@ IPython:
 11.4 ms ± 0.198 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ```
 
-Last, but not least, there is also an `imshow` function that is able to display
-a one-dimensional or two-dimensional array in the console. It won't replace
-matplotlib but it can comes handy for some (small) arrays:
+And the `imshow` function is able to display a one-dimensional or
+two-dimensional array in the console. It won't replace matplotlib but it can
+comes handy for some (small) arrays (you'll need a 256 colors terminal):
 
 ![](imshow.png)
 
@@ -457,6 +461,19 @@ Try to obtain this picture (where time goes from top to bottom):
 ![](diffusion.png)
 
 
+The code to display the figure from an array Z is:
+
+```Python
+import matplotlib as plt
+
+plt.figure(figsize=(6,3))
+plt.subplot(1,1,1,frameon=False)
+plt.imshow(Z, vmin=0, vmax=1)
+plt.xticks([]), plt.yticks([])
+plt.tight_layout()
+plt.show()
+```
+
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
 Sources [diffusion.py](diffusion.py)
@@ -509,6 +526,14 @@ To start with, here is how to convert the rule in a useful form:
 rule = 30 
 R = np.array([int(v) for v in '{0:08b}'.format(rule)])[::-1]
 ```
+
+and we consider this initial state:
+
+```Python
+Z = np.zeros((250,501), dtype=int)
+Z[0,250] = 1
+```
+
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
@@ -680,6 +705,25 @@ You can start by writing a translate, scale and rotate function first.
 > the rotated coordinates (x',y') are:
 >
 > x' = x.cos(a) - y.sin(a) and y' = x.sin(a) + y.cos(a)
+
+
+The display code is:
+
+```Python
+import matplotlib.pyplot as plt
+
+fig = plt.figure(figsize=(6,6))
+ax = plt.subplot(1,1,1, frameon=False)
+for i in range(len(P)):
+    X = np.r_[P[i,:,0], P[i,0,0]]
+    Y = np.r_[P[i,:,1], P[i,0,1]]
+    plt.plot(X, Y, color="black")
+plt.xticks([]), plt.yticks([])
+plt.tight_layout()
+plt.show()
+```
+
+
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
