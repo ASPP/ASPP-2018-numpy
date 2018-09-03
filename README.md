@@ -416,6 +416,7 @@ L = [  0,   0,   0,   0,   0,   0,   3, 233,
 Z = np.reshape(np.array(L, dtype=np.ubyte).view(dtype=">i8"), (2,2,2), order="F")
 print(Z[1,0,0])
 ```
+</p></details>
 
 
 * How would you access element at [1,0,0] without NumPy (harder)?
