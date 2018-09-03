@@ -889,6 +889,50 @@ For other type of neural networks, you can have a look at https://github.com/rou
 
 
 
+### Image quantization
+
+> In computer graphics, color quantization or color image quantization is
+> quantization applied to color spaces; it is a process that reduces the number
+> of distinct colors used in an image, usually with the intention that the new
+> image should be as visually similar as possible to the original image.
+>
+> – Wikipedia
+
+In this exercise, we want to produce color quantization, that is, considering a
+random image, we would like to reduce the number of colors without altering too
+much the perception of the image. We thus need to find the most representative
+colors.
+
+The first (naive) idea that may come to mind is to count the number of times a
+specific color is used and to use the most frequent colors for quantization.
+Unfortunately, this does not work very well as illustrated below:
+
+![](kitten.jpg)
+![](kitten-dithered.jpg)
+
+The reason is that some color and slight variations might be over-represented
+in th eoriginal image and will thus appears among the most frequent
+colors. This the reason why the kitten ended mostly in green and the flower
+totally dissapeared.
+
+To check by  yourself, you'll write the corresponding script  and check for the
+result:
+
+1. Load an image (using [imageio](http://imageio.github.io/)).[imread](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imread)
+2. Find the number of unique colors and their frequency (counts)
+3. Pick the n=16 most frequent colors
+4. Replace colors in the original image with the closest color (found previously)
+5. Save the result (using [imageio](http://imageio.github.io/)).[imsave](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imsave)
+
+
+We thus need a different method and this method is called 
+[k-means clustering](https://en.wikipedia.org/wiki/K-means_clustering).
+
+![](kitten.jpg)
+![](kitten-quantized.jpg)
+
+
+
 ## ❹ – References
 
 ### Book & tutorials
