@@ -479,13 +479,13 @@ print(value)
 
 The goal here is to compute the discrete equation over a finite domain using
 `as_strided` to produce a sliding-window view of a 1D array. This view can be
-then used to compute `u` at the next iteration. Using the the following initial
-conditions:
+then used to compute `U` at the next iteration. Using the the following initial
+conditions (using Z instead of U):
 
 
 ```Python
-U = np.random.uniform(0.00, 0.05, (50,100))
-U[0,5::10] = 1
+Z = np.random.uniform(0.00, 0.05, (50,100))
+Z[0,5::10] = 1
 ```
 
 Try to obtain this picture (where time goes from top to bottom):
@@ -506,6 +506,9 @@ plt.tight_layout()
 plt.show()
 ```
 
+**Hint**: You will need to write a `sliding_window(Z, size=3)` function that returns
+a strided view of Z.
+
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
 Sources [diffusion.py](diffusion.py)
@@ -523,8 +526,8 @@ def sliding_window(Z, size=2):
 
 # Initial conditions:
 # Domain size is 100 and we'll iterate over 50 time steps
-U = np.zeros((50,100))
-U[0,5::10] = 1.5
+Z = np.zeros((50,100))
+Z[0,5::10] = 1.5
 
 # Actual iteration
 F = 0.05
