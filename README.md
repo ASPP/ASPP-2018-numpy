@@ -721,6 +721,20 @@ S = np.zeros(25, dtype = dtype)
 
 </p></details><br/>
 
+We now need to initialize our array. For the four points describing a square,
+you can use the following points: [(-1,-1), (-1,+1), (+1,+1), (+1,-1)]
+
+<details><summary><b>Solution</b> (click to expand)</summary><p>
+
+```Python
+S["points"] = [(-1,-1), (-1,+1), (+1,+1), (+1,-1)]
+S["translate"] = (1,0)
+S["scale"] = 0.1
+S["rotate"] = np.linspace(0, 2*np.pi, len(S), endpoint=False)
+```
+</p></details><br/>
+
+
 Now, we need to write a function that apply all these transformations and write
 the results in new array:
 
@@ -811,6 +825,171 @@ The proposed solution has two loops. Can you imagine a way to do it without loop
 Have a look at [Multiple individual 2d rotation at once](https://stackoverflow.com/questions/40822983/multiple-individual-2d-rotation-at-once) on stack overflow. I did not implement it, feel free to issue a PR with the solution.
 
 </p></details>
+
+### Image quantization
+
+> In computer graphics, color quantization or color image quantization is
+> quantization applied to color spaces; it is a process that reduces the number
+> of distinct colors used in an image, usually with the intention that the new
+> image should be as visually similar as possible to the original image.
+>
+> – Wikipedia
+
+In this exercise, we want to produce color quantization, that is, considering a
+random image, we would like to reduce the number of colors without altering too
+much the perception of the image. We thus need to find the most representative
+colors.
+
+The first (naive) idea that may come to mind is to count the number of times a
+specific color is used and to use the most frequent colors for quantization.
+Unfortunately, this does not work very well as illustrated below:
+
+![](kitten.jpg)
+![](kitten-dithered.jpg)
+
+The reason is that some color and slight variations might be over-represented
+in th eoriginal image and will thus appears among the most frequent
+colors. This the reason why the kitten ended mostly in green and the flower
+totally dissapeared.
+
+To check by  yourself, you'll write the corresponding script  and check for the
+result:
+
+1. Load an image (using [imageio](http://imageio.github.io/).[imread](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imread))
+2. Find the number of unique colors and their frequency (counts)
+3. Pick the n=16 most frequent colors
+4. Replace colors in the original image with the closest color (found previously)
+5. Save the result (using [imageio](http://imageio.github.io/).[imsave](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imsave))
+
+
+<details><summary><b>Solution</b> (click to expand)</summary><p>
+
+Sources: [bad-dither.py](bad-dither.py)
+
+```Python
+import imageio
+import numpy as np
+import scipy.spatial
+
+# Number of final colors we want
+n = 16
+
+# Original Image
+I = imageio.imread("kitten.jpg")
+shape = I.shape
+
+# Flattened image
+I = I.reshape(shape[0]*shape[1], shape[2])
+
+# Find the unique colors and their frequency (=counts)
+colors, counts = np.unique(I, axis=0, return_counts=True)
+
+# Get the n most frequent colors
+sorted = np.argsort(counts)[::-1]
+C = I[sorted][:n]
+
+# Compute distance to most frequent colors
+D = scipy.spatial.distance.cdist(I, C, 'sqeuclidean')
+
+# Replace colors with closest one
+Z = (C[D.argmin(axis=1)]).reshape(shape)
+
+# Save result
+imageio.imsave("kitten-dithered.jpg", Z)
+```
+
+</p></details></br>
+
+
+We thus need a different method and this method is called [k-means
+clustering](https://en.wikipedia.org/wiki/K-means_clustering) that allow to
+partition data into n clusters whose centroids may serve as a prototype for the
+cluster.
+
+![](kitten.jpg)
+![](kitten-quantized.jpg)
+
+The algorithm is quite simple. We start with n random points (centroids) and we
+compute for each point in our data what is the closest centroid. Those
+constitute cluster of points. For each cluster, we compute its centroid (mean
+point) and we reiterate the processus for a given number of steps. In this
+exercise, you'll have to write such a k-means function and to use it to
+quantize the image.
+
+<details><summary><b>Solution</b> (click to expand)</summary><p>
+
+Sources: [kmeans.py](kmeans.py)
+
+```Python
+# Code by Gareth Rees, posted on stack overflow
+# https://codereview.stackexchange.com/questions/61598/k-mean-with-numpy
+
+import numpy as np
+import scipy.spatial
+
+def cluster_centroids(data, clusters, k=None):
+    if k is None:
+        k = np.max(clusters) + 1
+    result = np.empty(shape=(k,) + data.shape[1:])
+    for i in range(k):
+        np.mean(data[clusters == i], axis=0, out=result[i])
+    return result
+
+
+def kmeans(data, k=None, centroids=None, steps=20):
+    if centroids is not None and k is not None:
+        assert(k == len(centroids))
+    elif centroids is not None:
+        k = len(centroids)
+    elif k is not None:
+        # Forgy initialization method: choose k data points randomly.
+        centroids = data[np.random.choice(np.arange(len(data)), k, False)]
+    else:
+        raise RuntimeError("Need a value for k or centroids.")
+
+    for _ in range(max(steps, 1)):
+        # Squared distances between each point and each centroid.
+        sqdists = scipy.spatial.distance.cdist(centroids, data, 'sqeuclidean')
+
+        # Index of the closest centroid to each data point.
+        clusters = np.argmin(sqdists, axis=0)
+
+        new_centroids = cluster_centroids(data, clusters, k)
+        if np.array_equal(new_centroids, centroids):
+            break
+
+        centroids = new_centroids
+    return centroids, clusters
+
+
+if __name__ == '__main__':
+    import imageio
+
+    # Number of final colors we want
+    n = 16
+
+    # Original Image
+    I = imageio.imread("kitten.jpg")
+    shape = I.shape
+
+    # Flattened image
+    D = I.reshape(shape[0]*shape[1], shape[2])
+    
+    # Search for 16 centroids in D (using 20 iterations)
+    centroids, clusters = kmeans(D, k=n, steps=20)
+
+    # Create quantized image
+    I = (centroids[clusters]).reshape(shape)
+    I = np.round(I).astype(np.uint8)
+
+    # Save result
+    imageio.imsave("kitten-quantized.jpg", I)
+```
+
+</p></details></br>
+
+
+
 
 ### Neural networks
 
@@ -918,170 +1097,6 @@ for i in range(1000):
 ```
 
 For other type of neural networks, you can have a look at https://github.com/rougier/neural-networks/.
-
-
-
-### Image quantization
-
-> In computer graphics, color quantization or color image quantization is
-> quantization applied to color spaces; it is a process that reduces the number
-> of distinct colors used in an image, usually with the intention that the new
-> image should be as visually similar as possible to the original image.
->
-> – Wikipedia
-
-In this exercise, we want to produce color quantization, that is, considering a
-random image, we would like to reduce the number of colors without altering too
-much the perception of the image. We thus need to find the most representative
-colors.
-
-The first (naive) idea that may come to mind is to count the number of times a
-specific color is used and to use the most frequent colors for quantization.
-Unfortunately, this does not work very well as illustrated below:
-
-![](kitten.jpg)
-![](kitten-dithered.jpg)
-
-The reason is that some color and slight variations might be over-represented
-in th eoriginal image and will thus appears among the most frequent
-colors. This the reason why the kitten ended mostly in green and the flower
-totally dissapeared.
-
-To check by  yourself, you'll write the corresponding script  and check for the
-result:
-
-1. Load an image (using [imageio](http://imageio.github.io/).[imread](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imread))
-2. Find the number of unique colors and their frequency (counts)
-3. Pick the n=16 most frequent colors
-4. Replace colors in the original image with the closest color (found previously)
-5. Save the result (using [imageio](http://imageio.github.io/).[imsave](https://imageio.readthedocs.io/en/latest/userapi.html#imageio.imsave))
-
-
-<details><summary><b>Solution</b> (click to expand)</summary><p>
-
-Sources: [bad-dither](bad-dither.py)
-
-```Python
-import imageio
-import numpy as np
-import scipy.spatial
-
-# Number of final colors we want
-n = 16
-
-# Original Image
-I = imageio.imread("kitten.jpg")
-shape = I.shape
-
-# Flattened image
-I = I.reshape(shape[0]*shape[1], shape[2])
-
-# Find the unique colors and their frequency (=counts)
-colors, counts = np.unique(I, axis=0, return_counts=True)
-
-# Get the n most frequent colors
-sorted = np.argsort(counts)[::-1]
-C = I[sorted][:n]
-
-# Compute distance to most frequent colors
-D = scipy.spatial.distance.cdist(I, C, 'sqeuclidean')
-
-# Replace colors with closest one
-Z = (C[D.argmin(axis=1)]).reshape(shape)
-
-# Save result
-imageio.imsave("kitten-dithered.jpg", Z)
-```
-
-</p></details></br>
-
-
-We thus need a different method and this method is called [k-means
-clustering](https://en.wikipedia.org/wiki/K-means_clustering) that allow to
-partition data into n clusters whose centroids may serve as a prototype for the
-cluster.
-
-![](kitten.jpg)
-![](kitten-quantized.jpg)
-
-The algorithm is quite simple. We start with n random points (centroids) and we
-compute for each point in our data what is the closest centroids. Those
-constitute cluster of points. For each cluster, we compute its centroid (mean
-point) and we reiterate the processus for a given number of steps. In this
-exercise, you'll have to write such a k-means function and to use it to
-quantize the image.
-
-<details><summary><b>Solution</b> (click to expand)</summary><p>
-
-Sources: [kmeans.py](kmeans.py)
-
-```Python
-# Code by Gareth Rees, posted on stack overflow
-# https://codereview.stackexchange.com/questions/61598/k-mean-with-numpy
-
-import numpy as np
-import scipy.spatial
-
-def cluster_centroids(data, clusters, k=None):
-    if k is None:
-        k = np.max(clusters) + 1
-    result = np.empty(shape=(k,) + data.shape[1:])
-    for i in range(k):
-        np.mean(data[clusters == i], axis=0, out=result[i])
-    return result
-
-
-def kmeans(data, k=None, centroids=None, steps=20):
-    if centroids is not None and k is not None:
-        assert(k == len(centroids))
-    elif centroids is not None:
-        k = len(centroids)
-    elif k is not None:
-        # Forgy initialization method: choose k data points randomly.
-        centroids = data[np.random.choice(np.arange(len(data)), k, False)]
-    else:
-        raise RuntimeError("Need a value for k or centroids.")
-
-    for _ in range(max(steps, 1)):
-        # Squared distances between each point and each centroid.
-        sqdists = scipy.spatial.distance.cdist(centroids, data, 'sqeuclidean')
-
-        # Index of the closest centroid to each data point.
-        clusters = np.argmin(sqdists, axis=0)
-
-        new_centroids = cluster_centroids(data, clusters, k)
-        if np.array_equal(new_centroids, centroids):
-            break
-
-        centroids = new_centroids
-    return centroids, clusters
-
-
-if __name__ == '__main__':
-    import imageio
-
-    # Number of final colors we want
-    n = 16
-
-    # Original Image
-    I = imageio.imread("kitten.jpg")
-    shape = I.shape
-
-    # Flattened image
-    D = I.reshape(shape[0]*shape[1], shape[2])
-    
-    # Search for 16 centroids in D (using 20 iterations)
-    centroids, clusters = kmeans(D, k=n, steps=20)
-
-    # Create quantized image
-    I = (centroids[clusters]).reshape(shape)
-    I = np.round(I).astype(np.uint8)
-
-    # Save result
-    imageio.imsave("kitten-quantized.jpg", I)
-```
-
-</p></details></br>
 
 
 
