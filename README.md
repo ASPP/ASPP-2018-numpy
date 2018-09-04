@@ -166,9 +166,8 @@ Properties
 
 Try to code these two functions. You can then compare your implementation with
 [mine](tools.py).  
-
 **NOTE**: We don't care so much about the formatting, do not lose time trying
-to copy exactly.
+to copy it exactly.
 
 
 The [tools.py](tools.py) script comes with two other functions that might be
