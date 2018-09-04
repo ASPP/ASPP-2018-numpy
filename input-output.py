@@ -22,7 +22,7 @@ print(data[2])
 # Print all words with rank < 30
 print(data[data["rank"] < 30])
 
-# Sort the data according to frequency (see [np.argsort]()).
+# Sort the data according to frequency 
 sorted = np.sort(data, order="frequency")
 print(sorted)
 

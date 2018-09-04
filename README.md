@@ -100,6 +100,7 @@ Contributions](https://www.frontiersin.org/articles/10.3389/fninf.2017.00069/ful
 (that I wrote with [Fabien Benureau](https://github.com/benureau)).
 
 
+
 Last point, before heading to the course, I would like to warn you about a
 potential problem you may encounter once you'll have become familiar enough
 with NumPy. It is a very powerful library and you can make wonders with it but,
@@ -664,7 +665,6 @@ Here's a skeleton to start with:
 
 ```Python
 import numpy as np
-txtdata = open('data.txt', 'r')
 
 # Construct the data-type
 # For example:
@@ -710,7 +710,7 @@ print(data[2])
 # Print all words with rank < 30
 print(data[data["rank"] < 30])
 
-# Sort the data according to frequency (see [np.argsort]()).
+# Sort the data according to frequency.
 sorted = np.sort(data, order="frequency")
 print(sorted)
 
