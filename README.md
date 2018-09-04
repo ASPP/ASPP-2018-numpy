@@ -78,14 +78,35 @@ walk = random_walk_fastest(1000)
 
 Now, it is amazingly fast !
 
+```Pycon
+>>> timeit("random_walk_slow(1000)", globals())
+Timing 'random_walk_slow(1000)'
+1.58 ms ± 0.0228 ms per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 
-Before heading to the course, I would like to warn you about a potential
-problem you may encounter once you'll have become familiar with NumPy. It is a
-very powerful library and you can make wonders with it but, most of the time,
-this comes at the price of readability. If you don't comment your code at the
-time of writing, you won't be able to tell what a function is doing after a few
-weeks (or possibly days). For example, can you tell what the two functions
-below are doing?
+>>> timeit("random_walk_faster(1000)", globals())
+Timing 'random_walk_faster(1000)'
+281 us ± 3.15 us per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+
+>>> timeit("random_walk_fastest(1000)", globals())
+Timing 'random_walk_fastest(1000)'
+27.6 us ± 3.45 us per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+```
+
+**Warning**: You may have noticed (or not) that the `random_walk_fast` works
+but is not reproducible at all, which is pretty annoying in Science. If you
+want to know why, you can have a look at the article [Re-run, Repeat,
+Reproduce, Reuse, Replicate: Transforming Code into Scientific
+Contributions](https://www.frontiersin.org/articles/10.3389/fninf.2017.00069/full)
+(that I wrote with [Fabien Benureau](https://github.com/benureau)).
+
+
+Last point, before heading to the course, I would like to warn you about a
+potential problem you may encounter once you'll have become familiar enough
+with NumPy. It is a very powerful library and you can make wonders with it but,
+most of the time, this comes at the price of readability. If you don't comment
+your code at the time of writing, you won't be able to tell what a function is
+doing after a few weeks (or possibly days). For example, can you tell what the
+two functions below are doing?
 
 ```Python
 def function_1(seq, sub):
@@ -103,12 +124,6 @@ As you may have guessed, the second function is the
 vectorized-optimized-faster-NumPy version of the first function and it runs 10x
 faster than the pure Python version. But it is hardly readable.
 
-**Warning**: You may have noticed (or not) that the `random_walk_fast` works
-but is not reproducible at all, which is pretty annoying in Science. If you
-want to know why, you can have a look at the article [Re-run, Repeat,
-Reproduce, Reuse, Replicate: Transforming Code into Scientific
-Contributions](https://www.frontiersin.org/articles/10.3389/fninf.2017.00069/full)
-(that I wrote with [Fabien Benureau](https://github.com/benureau)).
 
 
 ## ❷ – Warmup
