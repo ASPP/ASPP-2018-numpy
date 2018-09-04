@@ -569,6 +569,18 @@ Z = np.zeros((250,501), dtype=int)
 Z[0,250] = 1
 ```
 
+Try to obtain the same figure. Display code is:
+
+```Python
+plt.figure(figsize=(6,3))
+plt.subplot(1,1,1,frameon=False)
+plt.imshow(Z, vmin=0, vmax=1, cmap=plt.cm.gray_r)
+plt.xticks([]), plt.yticks([])
+plt.tight_layout()
+plt.savefig("automata.png")
+plt.show()
+```
+
 
 <details><summary><b>Solution</b> (click to expand)</summary><p>
 
